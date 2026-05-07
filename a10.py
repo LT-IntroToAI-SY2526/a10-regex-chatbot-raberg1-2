@@ -114,7 +114,7 @@ def get_birth_date(name: str) -> str:
         birth date of the given person
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
+    # print(infobox_text)
     pattern = r"(?:Born|Date of birth.*)(?P<birth>\d{4}-\d{2}-\d{2})"
     error_text = (
         "Page infobox has no birth information (at least none in xxxx-xx-xx format)"
@@ -122,6 +122,25 @@ def get_birth_date(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("birth")
+
+def get_death_date(name: str) -> str:
+    """Gets death date of the given person
+
+    Args:
+        name - name of the person
+
+    Returns:
+        death date of the given person
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    print(infobox_text)
+    pattern = r"(?:Died[\w ,]+\()(?P<death>\d{4}-\d{2}-\d{2})"
+    error_text = (
+        "Page infobox has no death information (at least none in xxxx-xx-xx format)"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("death")
 
 
 # below are a set of actions. Each takes a list argument and returns a list of answers
@@ -139,6 +158,17 @@ def birth_date(matches: List[str]) -> List[str]:
         birth date of named person
     """
     return [get_birth_date(" ".join(matches))]
+
+def death_date(matches: List[str]) -> List[str]:
+    """Returns death date of named person in matches
+
+    Args:
+        matches - match from pattern of person's name to find death date of
+
+    Returns:
+        death date of named person
+    """
+    return [get_death_date(" ".join(matches))]
 
 
 def polar_radius(matches: List[str]) -> List[str]:
@@ -167,6 +197,7 @@ Action = Callable[[List[str]], List[Any]]
 # here, after all of the function definitions
 pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % born".split(), birth_date),
+    ("when did % die".split(), death_date),
     ("what is the polar radius of %".split(), polar_radius),
     (["bye"], bye_action),
 ]
