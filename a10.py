@@ -126,7 +126,7 @@ def get_birth_date(name: str) -> str:
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
     print(infobox_text)
-    pattern = r"(?:Born|Date of birth)([\w ]+\()(?P<birth>\d{4}-\d{2}-\d{2})"
+    pattern = r"(?:Born|Date of birth|Born:)([\w \n]+\()(?P<birth>\d{4}-\d{2}-\d{2})"
     error_text = (
         "Page infobox has no birth information (at least none in xxxx-xx-xx format)"
     )
